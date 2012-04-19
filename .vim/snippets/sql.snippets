@@ -1,0 +1,5 @@
+snippet create
+	CREATE TABLE IF NOT EXISTS ${1:tablename} (
+		${2:$1_id}      INT         UNSIGNED NOT NULL AUTO_INCREMENT,
+		PRIMARY KEY ($2)
+	);
