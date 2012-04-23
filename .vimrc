@@ -23,6 +23,7 @@ set nohlsearch
 set novisualbell
 set nowrap
 set number
+set pastetoggle=<F3>
 set scrolljump=5
 set scrolloff=3
 set shiftwidth=4
@@ -34,6 +35,7 @@ set splitbelow
 set splitright
 set statusline=%F%m%r%h%w\ (%04l/%04L)%=[FORMAT=%{&ff}]\ [TYPE=%Y]\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}
 set tabstop=4
+" set title
 set t_Co=256
 set wildmode=longest:full
 set wildmenu
@@ -72,8 +74,8 @@ call InitializeDirectories()
 " Mappings
 " map  <F1>  :tabe ~/.vimrc<CR>
 " map  <F2>  :source ~/.vimrc<CR>
-map  <F3>  :set paste<CR>i
-map  <F4>  :set nopaste<CR>
+" map  <F3>  :set paste<CR>i
+" map  <F4>  :set nopaste<CR>
 map  <F5>  :set hlsearch<CR>
 map  <F6>  :set nohlsearch<CR>
 map  <F7>  :tabprev<CR>
