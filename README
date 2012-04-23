@@ -1,1 +1,3 @@
-Repository for my . files (.screenrc, .vim(rc), etc.)
+Repository for my . files:
+ - .vim(rc)
+ - .tmux.conf
