@@ -1,179 +1,183 @@
-syntax on
+set nocompatible " vim, not vi!
+
+" required Vundle setup
+filetype off
+set runtimepath+=~/.vim/bundle/Vundle.vim
+
+call vundle#begin()
+Plugin 'gmarik/Vundle.vim'
+
+Plugin 'Raimondi/delimitMate'
+Plugin 'StanAngeloff/php.vim'
+Plugin 'bling/vim-airline'
+Plugin 'cakebaker/scss-syntax.vim'
+Plugin 'davidhalter/jedi-vim'
+Plugin 'ervandew/supertab'
+Plugin 'godlygeek/tabular'
+Plugin 'hdima/python-syntax'
+Plugin 'jmcantrell/vim-virtualenv'
+Plugin 'kien/ctrlp.vim'
+Plugin 'nathanaelkane/vim-indent-guides'
+Plugin 'scrooloose/nerdcommenter'
+Plugin 'scrooloose/nerdtree'
+Plugin 'scrooloose/syntastic'
+Plugin 'terryma/vim-expand-region'
+Plugin 'tpope/vim-fugitive'
+call vundle#end()
+filetype plugin indent on
+
+runtime macros/matchit.vim
+
 language en_US.utf8
-
 let &termencoding=&encoding
-let g:zenburn_high_Contrast = 1
 
-colorscheme zenburn
-
-" Indenting
-set autoindent
-set encoding=utf-8
-set expandtab
-set fileencoding=utf-8
-set fileformat=unix
+set autoindent                              " Copy indent from current line when starting a new line
+set backspace=2                             " Backspace over autoindent, linebreaks and start of insert
+" set colorcolumn=80                        " a comma separated list of screen columns that are highlighted with ColorColumn
+set completeopt=longest,menuone             " Completion options for CTRL-P/CTRL-N
+" set cursorline                              " Enable the highlighting of the active line (only used for the linenumber, see bottom)
+set encoding=utf-8                          " Sets the character encoding used inside Vim
+set expandtab                               " Use the appropriate number of spaces to insert a Tab
+set fileencoding=utf-8                      " Sets the character encoding for the file of this buffer
+set fileformat=unix                         " This gives the <EOL> of the current buffer (UNIX: <NL>)
 set formatoptions=ro
-set ignorecase
-set incsearch
-set laststatus=2
+set formatoptions-=t
+set hidden                                  " Hide a buffer when it is abondoned
+set ignorecase                              " Ignore case when searching
+set incsearch                               " Search whilst typing
+set laststatus=2                            " Force a statusline (even for a single window
+set lazyredraw                              " Improve performance when running macros
+set linebreak                               " Automatically break to the next line if the length of the exceeeds textwidth
+set list                                    " Enable list mode (characters for tabs, spaces and line-endings)
+set listchars=tab:»·,trail:·,eol:¬          " Specify other characters for certain list-items
 set modeline
 set noerrorbells
 set nofoldenable
-set nohlsearch
+set nohlsearch                              " Disable highlighted search by default
 set novisualbell
-set nowrap
-set number
-set pastetoggle=<F3>
+set nowrap                                  " Don't wrap text by default
+set number                                  " Show linenumbers
+set numberwidth=6                           " Width for the linenumber section
 set scrolljump=5
 set scrolloff=3
+set shiftround                              " Round identspaces to multitudes of shiftwidth
 set shiftwidth=4
-set showmatch
-set smartcase
-set smartindent
+set showmatch                               " When the cursor is on a matchable item (ie parenthesis), highlight the matching item
+set shortmess=atI
+set smartcase                               " When searching for a string that contains uppercase, ignore the ignorecase option
+set smartindent                             " Used with autoindent; indents a step further when using { or (
 set softtabstop=4
 set splitbelow
 set splitright
-set statusline=%F%m%r%h%w\ (%04l/%04L)%=[FORMAT=%{&ff}]\ [TYPE=%Y]\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}
-set tabstop=4
-" set title
-set t_Co=256
-set wildmode=longest:full
+" set statusline=%F%m%r%h%w\ (%04l/%04L)%=[FORMAT=%{&ff}]
+" \ [TYPE=%Y]\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}
+set synmaxcol=255                           " Halt syntax highlighting if the line exceeds 255 chars
+set noshowmode                              " Hide active mode from the statusline
+set tabstop=4                               " Number of spaces that a <Tab> in the file counts for
+set title
+set textwidth=79
+set t_Co=256                                " enable 256 colors
+set wildmode=list:longest
 set wildmenu
 
-" Base on https://github.com/spf13/spf13-vim
-function! InitializeDirectories()
-    let separator = "."
-    let parent = $HOME
-    let dir_list = {
-                \ 'backup': 'backupdir',
-                \ 'views': 'viewdir',
-                \ 'swap': 'directory' }
+" rebind <Leader> key
+let mapleader = ","
 
-    if has('persistent_undo')
-        let dir_list['undo'] = 'undodir'
-    endif
+vnoremap <Leader>s :sort<CR>                " map sort function to a key
+vnoremap < <gv  " better indentation        " easier moving of code blocks
+vnoremap > >gv  " better indentation
 
-    for [dirname, settingname] in items(dir_list)
-        let directory = parent . '/.vim/' . dirname . "/"
-        if exists("*mkdir")
-            if !isdirectory(directory)
-                call mkdir(directory)
-            endif
-        endif
-        if !isdirectory(directory)
-            echo "Warning: Unable to create backup directory: " . directory
-            echo "Try: mkdir -p " . directory
-        else
-            let directory = substitute(directory, " ", "\\\\ ", "g")
-            exec "set " . settingname . "=" . directory
-        endif
-    endfor
+" easier moving between tabs
+" map <Leader> <esc>:bp<CR>
+map <Leader><space> <esc>:bn<CR>
+map <Leader>n <esc>:bp<CR>
+map <Leader>m <esc>:bn<CR>
+
+" bind Ctrl+<movement> keys to move around the windows, instead of using Ctrl+w + <movement>
+map <c-j> <c-w>j
+map <c-k> <c-w>k
+map <c-l> <c-w>l
+map <c-h> <c-w>h
+map <c-n> :set number!<CR>
+map <c-l> :set list!<CR>
+
+" easier formatting of paragraphs
+vmap Q gq
+nmap Q gqap
+
+" nerdtree
+map <c-o> :NERDTreeToggle<CR>
+map <c-i> :IndentGuidesToggle<CR>
+let g:NERDTreeIgnore = ['\.pyc$']
+
+" vim-indent-guides
+let g:indent_guides_auto_colors = 0
+let g:indent_guides_start_level = 2
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=blue
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=darkblue
+
+" vim-airline
+let g:airline#extensions#tabline#enabled = 1
+let g:airline_powerline_fonts = 1
+let g:airline_theme = "tomorrow"
+
+function! AirlineInit()
+    "let g:airline_section_a = airline#section#create(["mode"])
+    "let g:airline_section_b = airline#section#create(["branch"])
+    let g:airline_section_c = airline#section#create(["%f"])
+    "let g:airline_section_x = airline#section#create(["fenc"])
+    "let g:airline_section_y = airline#section#create(["filetype"])
+    let g:airline_section_z = airline#section#create(["%l:%L (%p%%)"])
 endfunction
-call InitializeDirectories()
+autocmd VimEnter * call AirlineInit()
 
-" Mappings
-" map  <F1>  :tabe ~/.vimrc<CR>
-" map  <F2>  :source ~/.vimrc<CR>
-" map  <F3>  :set paste<CR>i
-" map  <F4>  :set nopaste<CR>
-map  <F5>  :set hlsearch<CR>
-map  <F6>  :set nohlsearch<CR>
-map  <F7>  :tabprev<CR>
-map! <F7>  <ESC>:tabprev<CR>
-map  <F8>  :tabnext<CR>
-map! <F8>  <ESC>:tabnext<CR>
-map  <F9>  :set number<CR>
-map! <F9>  <ESC>:set number<CR>i
-map  <F10>  :set nonumber<CR>
-map! <F10>  <ESC>:set nonumber<CR>i
+" ctrlp
+let g:ctrlp_by_filename = 0
+let g:ctrlp_regexp = 1
+let g:ctrlp_max_height = 10
+let g:ctrlp_dotfiles = 0
+let g:ctrlp_switch_buffer = 0
+let g:ctrlp_use_caching = 0
+if executable('ag')
+    set grepprg=ag\ --nogroup\ --nocolor
+    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
+else
+    let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
+    let g:ctrlp_prompt_mappings = {
+                \ 'AcceptSelection("e")': ['<space>', '<cr>', '<2-LeftMouse>'],
+                \ }
+endif
 
-" Change highlighting
-" hi Pmenu ctermbg=darkblue
-" hi PmenuSel ctermbg=cyan
-" hi PmenuSel ctermfg=white
-" hi Comment ctermfg=lightblue
-" hi Constant ctermfg=lightred
-" hi Preproc ctermfg=lightmagenta
-" hi LineNr ctermfg=white
-" hi Comment ctermfg=blue
-" hi Normal ctermfg=white
-" hi Structure ctermfg=green
-" hi Statement ctermfg=yellow
-" hi Identifier ctermfg=cyan
-" hi clear CursorLine
-hi CursorLine ctermbg=darkblue
-" hi clear CursorColumn
-hi CursorColumn ctermbg=darkblue
+" syntastic
+let g:syntastic_check_on_open = 1
+let g:syntastic_enable_signs = 1
 
-" Remove trailing whitespace
-func! DeleteTrailingWS()
-    norm mz
-    %s/\s\+$//ge
-    norm `z
-endfunc
+" virtualenv
+let g:virtualenv_auto_activate = 1
 
-" Remove any ^M
-func! DeleteTrailingDOS()
-    norm mz
-    %s///ge
-    norm `z
-endfunc
+" supertab
+let g:SuperTabDefaultCompletionType = "context"
+let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
 
-" Replace tabs with 4 spaces
-func! ReplaceTabs()
-    norm mz
-    %s/\t/    /ge
-    norm `z
-endfunc
+" jedi-vim (disable by default)
+let g:jedi#auto_initialization = 0
+let g:jedi#use_tabs_not_buffers = 0
+let g:jedi#goto_assignments_command = "<leader>g"
+let g:jedi#goto_definitions_command = "<leader>d"
+let g:jedi#documentation_command = "K"
+let g:jedi#usages_command = ""
+let g:jedi#completions_command = "<C-Space>"
+let g:jedi#rename_command = "<leader>r"
 
-" Highlight the trailing whitespaces
-highlight WhitespaceEOL ctermbg=DarkRed guibg=Red
-match WhitespaceEOL /\s\+$/
+" expand-region
+vmap v <Plug>(expand_region_expand)
+vmap <C-v> <Plug>(expand_region_shrink)
 
-" Highlight the tabs
-highlight NastyTabs ctermbg=DarkBlue guibg=Blue
-match NastyTabs /\t/
+" autocmd VimEnter,Colorscheme * :hi ColorColumn ctermbg=darkblue
+autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=blue
+autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=darkblue
 
-match ErrorMsg /\s\+$/
+let b:python_version_2 = 1
 
-
-" Map the whitespace removal to keystrokes (<leader> = '\')
-map <silent> <leader>ds :call DeleteTrailingWS()<CR>
-" Map the DOS ^M removal to keystrokes (<leader> = '\')
-map <silent> <leader>dd :call DeleteTrailingDOS()<CR>
-" Map the tabs replacing to keystrokes (<leader> = '\')
-map <silent> <leader>rt :call ReplaceTabs()<CR>
-" Mark the line and column for the cursor
-map <silent> <Leader>cc :set cursorcolumn! cursorline!<CR>
-
-" Clean a file when saving it:
-"  - Remove trailing whitespace
-"  - Remove trailing ^M (DOS)
-augroup savecleanup
-    autocmd!
-    autocmd BufWrite *.{js,php,sql,html,tpl,py} :call DeleteTrailingWS()
-    autocmd BufWrite *.{js,php,sql,html,tpl,py} :call DeleteTrailingDOS()
-augroup end
-
-" Force highlighting when entering a window/tab
-augroup hightlightws
-    autocmd!
-    autocmd BufWinEnter *.{js,php,sql,html,tpl,py} match WhitespaceEOL /\s\+$/
-augroup end
-
-" Force highlighting when entering a window/tab
-augroup hightlighttabs
-    autocmd!
-    autocmd BufWinEnter *.{js,php,sql,html,tpl,py} match NastyTabs /\t/
-augroup end
-
-"augroup readskeleton
-"    autocmd BufNewFile  *.html  0r ~/.vim/skel/skeleton.html
-"    autocmd BufNewFile  *.php   0r ~/.vim/skel/skeleton.php
-"    autocmd BufNewFile  *.py    0r ~/.vim/skel/skeleton.py
-"    autocmd BufNewFile  *.js    0r ~/.vim/skel/skeleton.js
-"    autocmd BufNewFile  *.sql   0r ~/.vim/skel/skeleton.mysql
-"augroup end
-
-" Load the settings for snipMate
-source ~/.vim/snipMate_settings.vim
+colorscheme Tomorrow-Night-Bright
+syntax on
