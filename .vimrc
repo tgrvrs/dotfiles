@@ -12,7 +12,7 @@ Plugin 'StanAngeloff/php.vim'
 Plugin 'bling/vim-airline'
 Plugin 'cakebaker/scss-syntax.vim'
 Plugin 'davidhalter/jedi-vim'
-Plugin 'ervandew/supertab'
+"Plugin 'ervandew/supertab'
 Plugin 'godlygeek/tabular'
 Plugin 'hdima/python-syntax'
 Plugin 'jmcantrell/vim-virtualenv'
@@ -23,10 +23,11 @@ Plugin 'scrooloose/nerdtree'
 Plugin 'scrooloose/syntastic'
 Plugin 'terryma/vim-expand-region'
 Plugin 'tpope/vim-fugitive'
+Plugin 'vim-scripts/Css-Pretty'
+Plugin 'hynek/vim-python-pep8-indent'
+Plugin 'Shougo/neocomplete.vim'
 call vundle#end()
 filetype plugin indent on
-
-runtime macros/matchit.vim
 
 language en_US.utf8
 let &termencoding=&encoding
@@ -105,79 +106,26 @@ map <c-l> :set list!<CR>
 vmap Q gq
 nmap Q gqap
 
-" nerdtree
-map <c-o> :NERDTreeToggle<CR>
-map <c-i> :IndentGuidesToggle<CR>
-let g:NERDTreeIgnore = ['\.pyc$']
+set runtimepath+=~/.vim/custom
 
-" vim-indent-guides
-let g:indent_guides_auto_colors = 0
-let g:indent_guides_start_level = 2
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=blue
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=darkblue
+runtime! custom/airline.vim
+runtime! custom/ctrlp.vim
+runtime! custom/expandregion.vim
+runtime! custom/indentguides.vim
+runtime! custom/nerdtree.vim
+runtime! custom/syntastic.vim
+runtime! custom/virtualenv.vim
+runtime! custom/jedi-vim.vim
+" runtime! custom/supertab.vim
+runtime! custom/neocomplete.vim
 
-" vim-airline
-let g:airline#extensions#tabline#enabled = 1
-let g:airline_powerline_fonts = 1
-let g:airline_theme = "tomorrow"
-
-function! AirlineInit()
-    "let g:airline_section_a = airline#section#create(["mode"])
-    "let g:airline_section_b = airline#section#create(["branch"])
-    let g:airline_section_c = airline#section#create(["%f"])
-    "let g:airline_section_x = airline#section#create(["fenc"])
-    "let g:airline_section_y = airline#section#create(["filetype"])
-    let g:airline_section_z = airline#section#create(["%l:%L (%p%%)"])
-endfunction
-autocmd VimEnter * call AirlineInit()
-
-" ctrlp
-let g:ctrlp_by_filename = 0
-let g:ctrlp_regexp = 1
-let g:ctrlp_max_height = 10
-let g:ctrlp_dotfiles = 0
-let g:ctrlp_switch_buffer = 0
-let g:ctrlp_use_caching = 0
-if executable('ag')
-    set grepprg=ag\ --nogroup\ --nocolor
-    let g:ctrlp_user_command = 'ag %s -l --nocolor -g ""'
-else
-    let g:ctrlp_user_command = ['.git', 'cd %s && git ls-files . -co --exclude-standard', 'find %s -type f']
-    let g:ctrlp_prompt_mappings = {
-                \ 'AcceptSelection("e")': ['<space>', '<cr>', '<2-LeftMouse>'],
-                \ }
-endif
-
-" syntastic
-let g:syntastic_check_on_open = 1
-let g:syntastic_enable_signs = 1
-
-" virtualenv
-let g:virtualenv_auto_activate = 1
-
-" supertab
-let g:SuperTabDefaultCompletionType = "context"
-let g:SuperTabDefaultCompletionType = "<c-x><c-o>"
-
-" jedi-vim (disable by default)
-let g:jedi#auto_initialization = 0
-let g:jedi#use_tabs_not_buffers = 0
-let g:jedi#goto_assignments_command = "<leader>g"
-let g:jedi#goto_definitions_command = "<leader>d"
-let g:jedi#documentation_command = "K"
-let g:jedi#usages_command = ""
-let g:jedi#completions_command = "<C-Space>"
-let g:jedi#rename_command = "<leader>r"
-
-" expand-region
-vmap v <Plug>(expand_region_expand)
-vmap <C-v> <Plug>(expand_region_shrink)
-
-" autocmd VimEnter,Colorscheme * :hi ColorColumn ctermbg=darkblue
-autocmd VimEnter,Colorscheme * :hi IndentGuidesOdd  ctermbg=blue
-autocmd VimEnter,Colorscheme * :hi IndentGuidesEven ctermbg=darkblue
-
-let b:python_version_2 = 1
+" runtime! custom/*.vim
+runtime macros/matchit.vim
 
 colorscheme Tomorrow-Night-Bright
 syntax on
+
+function TrimWhiteSpace()
+    %s/\s\+$//e
+    ''
+:endfunction
