@@ -26,6 +26,7 @@ Plugin 'tpope/vim-fugitive'
 Plugin 'vim-scripts/Css-Pretty'
 Plugin 'hynek/vim-python-pep8-indent'
 Plugin 'Shougo/neocomplete.vim'
+Plugin 'chriskempson/base16-vim'
 call vundle#end()
 filetype plugin indent on
 
@@ -88,6 +89,8 @@ vnoremap <Leader>s :sort<CR>                " map sort function to a key
 vnoremap < <gv  " better indentation        " easier moving of code blocks
 vnoremap > >gv  " better indentation
 
+map <Leader>p :set paste<CR>
+
 " easier moving between tabs
 " map <Leader> <esc>:bp<CR>
 map <Leader><space> <esc>:bn<CR>
@@ -122,10 +125,12 @@ runtime! custom/neocomplete.vim
 " runtime! custom/*.vim
 runtime macros/matchit.vim
 
-colorscheme Tomorrow-Night-Bright
+set background=dark
+let base16colorspace=256
+colorscheme base16-chalk
+" colorscheme Tomorrow-Night-Bright
 syntax on
 
 function TrimWhiteSpace()
     %s/\s\+$//e
-    ''
 :endfunction
