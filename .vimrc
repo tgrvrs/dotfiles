@@ -245,11 +245,15 @@ colorscheme base16-chalk
 syntax on
 
 " }}}
+" AutoCommand groups {{{
 
 augroup configgroup
     autocmd!
     autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
 augroup END
+
+" }}}
+" Functions {{{
 
 " Strips trailing whitespace at the end of files. This is called on buffer
 " write in the autogroup above.
@@ -262,5 +266,7 @@ function! <SID>StripTrailingWhitespaces()
     let @/=_s
     call cursor(l, c)
 endfunction
+
+" }}}
 
 " vim:foldmethod=marker:foldlevel=0
