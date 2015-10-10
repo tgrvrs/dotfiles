@@ -108,7 +108,7 @@ set foldenable
 nnoremap <space> za
 
 " }}}
-" GUI {{{ 
+" GUI {{{
 
 " Enable 256 colors (don't fool vim - property report the terminal capabilities
 " using .screenrc (term 'screen-256color') or terminal emulator
@@ -227,8 +227,21 @@ syntax on
 
 " }}}
 
-function TrimWhiteSpace()
+augroup configgroup
+    autocmd!
+    autocmd BufWritePre * :call <SID>StripTrailingWhitespaces()
+augroup END
+
+" Strips trailing whitespace at the end of files. This is called on buffer
+" write in the autogroup above.
+function! <SID>StripTrailingWhitespaces()
+    " save last search & cursor position
+    let _s=@/
+    let l = line(".")
+    let c = col(".")
     %s/\s\+$//e
-:endfunction
+    let @/=_s
+    call cursor(l, c)
+endfunction
 
 " vim:foldmethod=marker:foldlevel=0
