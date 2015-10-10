@@ -34,15 +34,17 @@ case "$TERM" in
     ;;
 esac
 
-eval `dircolors`
+if [ -t 0 ]; then
+    eval `dircolors`
 
-BASE16_SHELL="$HOME/git/base16-shell/base16-chalk.dark.sh"
-[[ -s $BASE16_SHELL ]] && source $BASE16_SHELL
+    BASE16_SHELL="$HOME/git/base16-shell/base16-chalk.dark.sh"
+    [[ -s $BASE16_SHELL ]] && source $BASE16_SHELL
+fi
 
 # http://samrowe.com/wordpress/ssh-agent-and-gnu-screen
 function grabssh() {
 
-    FIXSSH=$HOME/bin/fixssh
+    SSH_ENV=$HOME/.ssh/ssh_env_vars
 
     SSHV="SSH_CLIENT SSH_TTY SSH_AUTH_SOCK SSH_CONNECTION DISPLAY"
 
@@ -51,15 +53,41 @@ function grabssh() {
         s/$/"/
         s/^/export /'
 
-    done 1>"$FIXSSH"
+    done 1>"$SSH_ENV"
+    chmod 0600 "$SSH_ENV"
+}
 
-    if [[ -x "$FIXSSH" ]]
-    then
-        echo ""
-    else
-        chmod +x "$FIXSSH"
-    fi
+function fixssh() {
+
+    SSH_ENV=$HOME/.ssh/ssh_env_vars
+
+    source "$SSH_ENV"
 }
 
 alias screen='grabssh ; screen'
 alias ssh='fixssh ; ssh'
+
+function git_ps1() {
+
+    CWD=`pwd`
+
+    if [ -d "$CWD/.git" ]; then
+        BRANCH=`git rev-parse --abbrev-ref HEAD`
+        echo "($BRANCH)"
+        return 1
+    fi
+
+    return 0
+}
+
+function venv_ps1 {
+
+    if [ ! -z "$VIRTUAL_ENV" ]; then
+        VINV=`basename $VIRTUAL_ENV`
+        echo "($VINV)"
+    fi
+}
+
+if [[ "$PS1" ]]; then
+    export PS1='\[\033[00m\]\[\033[01;37m\]$(git_ps1)(\j) \[\033[01;32m\]\u@\h\[\033[00m\]: \[\033[01;34m\]\w \$\[\033[00m\] '
+fi
