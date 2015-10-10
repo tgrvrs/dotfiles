@@ -122,6 +122,25 @@ set colorcolumn=80,120
 set cursorline
 " Force a statusline (even for a single window
 set laststatus=2
+" Format the statusline
+" Full filename
+set statusline=%F
+" Modification symbol
+set statusline+=%m
+" Readonly flag
+set statusline+=%r
+" Preview window flag
+set statusline+=%w
+" Linenumber / Total lines
+set statusline+=\ (%04l/%04L)
+" Format filetype
+set statusline+=\ %=[FORMAT=%{&ff}]
+" Type flag
+set statusline+=\ [TYPE=%Y]
+" Check for BOM (utf8)
+set statusline+=\ %{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")
+            \\ &&
+            \\ &bomb)?\",B\":\"\").\"]\ \"}
 " No beep or screen flash upon errors
 set noerrorbells
 " No screen flash at all
